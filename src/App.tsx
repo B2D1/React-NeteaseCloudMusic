@@ -3,24 +3,25 @@ import './App.scss';
 import { observer } from 'mobx-react';
 import * as React from 'react';
 
-import User from './store';
+import HomeStore from './store/home';
 
 interface IApp {
-    user?: any;
+    homeStore?: any;
 }
+
+const homeStore = new HomeStore();
 
 @observer
 class App extends React.Component<IApp> {
+    public componentDidMount() {
+        homeStore.fetchBanner();
+    }
     public render() {
-        const user: User = this.props.user;
         return (
             <div>
-                Hello,{user.name}!
-                <input
-                    type='button'
-                    value='change name'
-                    onClick={e => user.fetchTodos()}
-                />
+                {homeStore.banner.map((v, i) => (
+                    <img src={v.imageUrl} />
+                ))}
             </div>
         );
     }
