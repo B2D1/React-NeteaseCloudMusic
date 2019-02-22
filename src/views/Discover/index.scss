@@ -1,0 +1,41 @@
+@import '../../sass/variable.scss';
+.discover-sticky {
+    position: relative;
+    background-color: $primary-color;
+    height: 12rem;
+    .switch-bar {
+        width: 2.5rem;
+        height: 2px;
+        border-radius: 10px;
+        position: absolute;
+        transform: translateX(-50%);
+        transition: left .2s ease;
+        margin-top: 2px;
+        background-color: $white-color;
+    }
+    .discover-switch {
+        display: flex;
+        justify-content: space-around;
+        .recommend-active::after {
+            content: '';
+            position: absolute;
+            bottom: -0.3rem;
+            left: 50%;
+            width: 2.5rem;
+            height: 0.1rem;
+            border-radius: 10px;
+            transform: translateX(-50%);
+            background-color: $white-color;
+        }
+        span {
+            position: relative;
+            color: $white-color;
+            font-size: 1.3rem;
+        }
+    }
+}
+
+.discover-slide {
+    position: absolute;
+    top: 6rem;
+}

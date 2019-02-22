@@ -1,27 +1,14 @@
 import './App.scss';
 
-import { observer } from 'mobx-react';
 import * as React from 'react';
 
-import HomeStore from './store/home';
+import Discover from './views/Discover';
 
-interface IApp {
-    homeStore?: any;
-}
-
-const homeStore = new HomeStore();
-
-@observer
-class App extends React.Component<IApp> {
-    public componentDidMount() {
-        homeStore.fetchBanner();
-    }
+class App extends React.Component {
     public render() {
         return (
             <div>
-                {homeStore.banner.map((v, i) => (
-                    <img src={v.imageUrl} />
-                ))}
+                <Discover />
             </div>
         );
     }
