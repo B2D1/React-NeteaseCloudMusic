@@ -4,10 +4,10 @@ const URL = {
     banner: '/banner',
 };
 
-class HomeAPI {
+class DiscoverAPI {
     public async fetchBanner() {
         return await request.get(URL.banner);
     }
 }
 
-export default HomeAPI;
+export default DiscoverAPI;

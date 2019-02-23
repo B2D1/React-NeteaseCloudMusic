@@ -11,7 +11,7 @@ interface ISlide {
 }
 @observer
 class Slide extends React.Component<ISlide> {
-    public myRef: any;
+    public slideRef: any;
     public throttleNext = throttle(
         this.props.slide.next,
         this.props.slide,
@@ -19,8 +19,9 @@ class Slide extends React.Component<ISlide> {
     );
     constructor(props: any) {
         super(props);
-        this.myRef = React.createRef();
+        this.slideRef = React.createRef();
     }
+
     public screenChange = () => {
         const { slide } = this.props;
         slide.resize(document.body.clientWidth);
@@ -29,7 +30,9 @@ class Slide extends React.Component<ISlide> {
         });
     };
     public componentDidMount() {
-        this.props.slide.fetchBanner();
+        const { slide } = this.props;
+        slide.fetchBanner();
+        slide.autoPlay(this.slideRef.current);
         this.screenChange();
     }
     public render() {
@@ -51,20 +54,35 @@ class Slide extends React.Component<ISlide> {
                         ...slideStyle,
                         ...offsetXStyle,
                     }}
-                    ref={this.myRef}
+                    ref={this.slideRef}
+                    onTouchMove={() => slide.cancelPlay()}
+                    onTouchEnd={() => slide.autoPlay(this.slideRef.current)}
                 >
                     {slide.banners.map((v: any, i: number) => (
-                        <div key={i} className='banner' style={bannerStyle}>
+                        <div
+                            key={i}
+                            className='banner'
+                            style={bannerStyle}
+                            onTouchStart={evt => {
+                                slide.swipeBannerStart(evt);
+                            }}
+                            onTouchMove={evt => {
+                                slide.swipeBannerMove(
+                                    evt,
+                                    this.slideRef.current
+                                );
+                            }}
+                            onTouchEnd={evt => {
+                                slide.swipeBannerEnd(
+                                    evt,
+                                    this.slideRef.current
+                                );
+                            }}
+                        >
                             <img src={v.imageUrl} />
                         </div>
                     ))}
                 </div>
-                <button onClick={() => this.throttleNext(this.myRef.current,2,3)}>
-                    next
-                </button>
-                <button onClick={() => slide.prev(this.myRef.current)}>
-                    prev
-                </button>
                 <div className='indicator'>
                     <ul>
                         {slide.banners.map((v: any, i: number) =>
