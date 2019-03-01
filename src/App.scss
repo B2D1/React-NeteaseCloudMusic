@@ -1,4 +1,3 @@
-
 body {
     overflow-y: scroll;
     margin: 0;
@@ -10,4 +9,13 @@ html {
     font-family: -apple-system, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Arial, sans-serif;
     text-rendering: optimizeLegibility;
     color: #333;
+}
+
+ul {
+    padding: 0;
+    margin: 0
+}
+
+li {
+    list-style-type: none;
 }

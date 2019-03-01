@@ -147,7 +147,10 @@ module.exports = {
                             compact: true,
                         },
                     },
-
+                    {
+                        test: /\.svg$/,
+                        use: ['@svgr/webpack'],
+                    },
                     // Compile .tsx?
                     {
                         test: /\.(ts|tsx)$/,

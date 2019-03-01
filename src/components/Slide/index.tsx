@@ -4,7 +4,6 @@ import { observer } from 'mobx-react';
 import * as React from 'react';
 
 import SlideStore from '../../store/slide';
-import throttle from '../../utils/throttle';
 
 interface ISlide {
     slide: SlideStore;
@@ -12,16 +11,10 @@ interface ISlide {
 @observer
 class Slide extends React.Component<ISlide> {
     public slideRef: any;
-    public throttleNext = throttle(
-        this.props.slide.next,
-        this.props.slide,
-        600
-    );
     constructor(props: any) {
         super(props);
         this.slideRef = React.createRef();
     }
-
     public screenChange = () => {
         const { slide } = this.props;
         slide.resize(document.body.clientWidth);
@@ -32,8 +25,13 @@ class Slide extends React.Component<ISlide> {
     public componentDidMount() {
         const { slide } = this.props;
         slide.fetchBanner();
+        slide.init(this.slideRef.current);
         slide.autoPlay(this.slideRef.current);
         this.screenChange();
+    }
+    public componentWillUnmount() {
+        const { slide } = this.props;
+        slide.cancelPlay();
     }
     public render() {
         const { slide } = this.props;

@@ -3,13 +3,14 @@
     position: relative;
     background-color: $primary-color;
     height: 12rem;
+    margin-bottom: 4rem;
     .switch-bar {
         width: 2.5rem;
         height: 2px;
         border-radius: 10px;
         position: absolute;
         transform: translateX(-50%);
-        transition: left .2s ease;
+        transition: left 0.2s ease;
         margin-top: 2px;
         background-color: $white-color;
     }
@@ -38,4 +39,93 @@
 .discover-slide {
     position: absolute;
     top: 6rem;
+}
+
+.discover-tab {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    ul {
+        display: flex;
+        justify-content: space-evenly;
+        li {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            div {
+                align-items: center;
+                background: $primary-color;
+                width: 4rem;
+                height: 4rem;
+                display: flex;
+                justify-content: center;
+                border-radius: 50%;
+                box-shadow: 0 0 2px 2px #ccc;
+            }
+            span {
+                color: #000;
+                margin-top: 0.5rem;
+            }
+        }
+    }
+}
+
+.disc-block-title {
+    margin-bottom: 1rem;
+    span {
+        font-size: 1.3rem;
+        font-weight: bold;
+        margin: 0 0.2rem 0 1rem;
+    }
+    svg {
+        position: relative;
+        top: 1px;
+    }
+}
+
+.songList-container {
+    padding: 0 1rem;
+}
+
+.songList-item {
+    width: calc((100% - 2rem) / 3);
+    display: inline-block;
+    height: 14rem;
+    .item-cover {
+        position: relative;
+        width: 100%;
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+    }
+}
+
+.item-text {
+    height: 32px;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.songList-item+.songList-item {
+    margin-left: 1rem;
+}
+
+.songList-item:nth-child(4n) {
+    margin-left: 0rem;
+}
+
+.item-playCount {
+    position: absolute;
+    top: 2px;
+    right: 5px;
+    display: flex;
+    justify-content: flex-end;
+    color: #f1f1f1;
+    align-items: center;
+    span {
+        margin-left: 4px;
+    }
 }

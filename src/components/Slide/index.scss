@@ -4,8 +4,7 @@
     width: 100vw;
     overflow: hidden;
     .banner-container {
-        position: relative;
-        // transition: left 0.3s ease-in-out;
+        position: relative; // transition: left 0.3s ease-in-out;
         .banner {
             display: inline-block;
             padding: 0px 1rem;
@@ -20,16 +19,14 @@
     .indicator {
         position: absolute;
         left: 50%;
-        bottom: -0.1rem;
+        bottom: 1rem;
         transform: translateX(-50%);
         .active-indicator {
             background-color: $primary-color;
         }
         ul {
-            padding: 0;
             display: flex;
             li {
-                list-style-type: none;
                 width: 0.5rem;
                 height: 0.5rem;
                 background-color: #ccc;

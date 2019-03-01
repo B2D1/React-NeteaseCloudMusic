@@ -17,23 +17,30 @@ export default class Slide {
     @observable public swipeEnd: number = 0;
     @observable public moveStart: number = 0;
     @observable public timer: any = null;
-    public styleConvertToNum(target: any, attr: string) {
-        return +target.style[attr].match(/\d+/);
+    public styleConvertToNum(elem: HTMLElement, attr: string) {
+        return +elem.style[attr].match(/\d+/);
     }
     @action
-    public autoPlay(target: any) {
+    public autoPlay(elem: HTMLElement) {
         this.timer = setInterval(() => {
-            this.next(target);
+            this.next(elem);
         }, this.delay);
     }
     @action
     public cancelPlay() {
-        clearInterval(this.timer);
+        this.timer = clearInterval(this.timer);
     }
     @action
-    public swipeBannerMove(evt: any, target: any) {
+    public init(elem: HTMLElement) {
+        this.timer = clearInterval(this.timer);
+        this.curIndex = 1;
+        this.offsetX = this.curIndex * this.width;
+        elem.style.left = -this.offsetX + 'px';
+    }
+    @action
+    public swipeBannerMove(evt: React.TouchEvent, elem: HTMLElement) {
         const moveStart = evt.touches[0].clientX;
-        const initLeft = this.styleConvertToNum(target, 'left');
+        const initLeft = this.styleConvertToNum(elem, 'left');
         if (this.moveStart === 0) {
             this.moveStart = moveStart;
             return;
@@ -42,47 +49,46 @@ export default class Slide {
         if (this.moveStart !== moveStart) {
             const moveOffset = this.moveStart - moveStart;
             const offsetLeft = initLeft + moveOffset;
-            target.style.left = -offsetLeft + 'px';
+            elem.style.left = -offsetLeft + 'px';
             this.moveStart = moveStart;
         }
     }
     @action
-    public swipeBannerStart(evt: any) {
+    public swipeBannerStart(evt: React.TouchEvent) {
         const swipeStart = evt.changedTouches[0].clientX;
         this.swipeStart = swipeStart;
     }
     @action
-    public swipeBannerEnd(evt: any, target: any) {
+    public swipeBannerEnd(evt: React.TouchEvent, elem: HTMLElement) {
         const swipeEnd = evt.changedTouches[0].clientX;
-        const initPos = this.styleConvertToNum(target, 'left');
+        const initPos = this.styleConvertToNum(elem, 'left');
         if (this.swipeStart > swipeEnd) {
             if (this.swipeStart - swipeEnd > this.width / 2) {
-                this.next(target, initPos);
+                this.next(elem, initPos);
             } else {
                 animate(
                     this.duration,
                     initPos || this.offsetX - this.width,
                     this.offsetX,
                     this.move,
-                    target,
+                    elem,
                     this.fix
                 );
             }
         } else {
             if (swipeEnd - this.swipeStart > this.width / 2) {
-                this.prev(target, initPos);
+                this.prev(elem, initPos);
             } else {
                 animate(
                     this.duration,
                     initPos || this.offsetX + this.width,
                     this.offsetX,
                     this.move,
-                    target,
+                    elem,
                     this.fix
                 );
             }
         }
-
         this.moveStart = 0;
         this.swipeStart = 0;
     }
@@ -100,7 +106,7 @@ export default class Slide {
         });
     }
     @action
-    public next(target: any, initPos?: number) {
+    public next(elem: HTMLElement, initPos?: number) {
         this.curIndex++;
         this.offsetX = this.width * this.curIndex;
         animate(
@@ -108,12 +114,12 @@ export default class Slide {
             initPos || this.offsetX - this.width,
             this.offsetX,
             this.move,
-            target,
+            elem,
             this.fix
         );
     }
 
-    public prev(target: any, initPos?: number) {
+    public prev(elem: HTMLElement, initPos?: number) {
         this.curIndex--;
         this.offsetX = this.width * this.curIndex;
         animate(
@@ -121,7 +127,7 @@ export default class Slide {
             initPos || this.offsetX + this.width,
             this.offsetX,
             this.move,
-            target,
+            elem,
             this.fix
         );
     }
@@ -131,20 +137,20 @@ export default class Slide {
         this.offsetX = this.curIndex * this.width;
     }
     @action
-    public move = (target: any, offset: number) => {
-        target.style.left = -offset + 'px';
+    public move = (elem: HTMLElement, offset: number) => {
+        elem.style.left = -offset + 'px';
     };
     @action
-    public fix = (target: any) => {
+    public fix = (elem: HTMLElement) => {
         if (this.curIndex === this.Len - 1) {
             this.curIndex = 1;
-            this.offsetX = this.width;
-            target.style.left = -this.offsetX + 'px';
+            this.offsetX = this.curIndex * this.width;
+            elem.style.left = -this.offsetX + 'px';
         }
         if (this.curIndex === 0) {
             this.curIndex = this.Len - 2;
             this.offsetX = this.curIndex * this.width;
-            target.style.left = -this.offsetX + 'px';
+            elem.style.left = -this.offsetX + 'px';
         }
     };
 }
