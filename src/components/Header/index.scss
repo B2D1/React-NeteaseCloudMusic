@@ -1,0 +1,12 @@
+@import '../../sass/variable.scss';
+.header {
+    color: $white-color;
+    background-color: $primary-color;
+    height: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .title{
+        font-size: 1.3rem;
+    }
+}
