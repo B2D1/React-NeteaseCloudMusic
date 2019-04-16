@@ -1,11 +1,13 @@
-import * as React from 'react';
 import './index.scss';
-import IconDiscover from '../../assets/icon/discover.svg';
-import IconAccount from '../../assets/icon/account.svg';
-import IconFriend from '../../assets/icon/friend.svg';
-import IconVideo from '../../assets/icon/video.svg';
-import IconMine from '../../assets/icon/mine.svg';
+
+import * as React from 'react';
 import { NavLink } from 'react-router-dom';
+
+import IconAccount from '../../assets/icon/account.svg';
+import IconDiscover from '../../assets/icon/discover.svg';
+import IconFriend from '../../assets/icon/friend.svg';
+import IconMine from '../../assets/icon/mine.svg';
+import IconVideo from '../../assets/icon/video.svg';
 
 export default class Footer extends React.Component {
     public render() {
