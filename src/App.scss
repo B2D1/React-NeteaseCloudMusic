@@ -1,21 +1,22 @@
 body {
-    overflow-y: scroll;
-    margin: 0;
-    box-sizing: border-box;
+  overflow-x: hidden;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 html {
-    font-size: 12px;
-    font-family: -apple-system, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Arial, sans-serif;
-    text-rendering: optimizeLegibility;
-    color: #333;
+  font-size: 12px;
+  font-family: -apple-system, PingFang SC, Hiragino Sans GB, Microsoft YaHei,
+    Helvetica Neue, Arial, sans-serif;
+  text-rendering: optimizeLegibility;
+  color: #444;
 }
 
 ul {
-    padding: 0;
-    margin: 0
+  padding: 0;
+  margin: 0;
 }
 
 li {
-    list-style-type: none;
+  list-style-type: none;
 }

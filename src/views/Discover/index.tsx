@@ -1,11 +1,11 @@
 import './index.scss';
 
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import * as React from 'react';
+import { RouteComponentProps } from 'react-router-dom';
 
 import DiscoverAPI from '../../api/discover';
 import IconArrow from '../../assets/icon/arrow.svg';
-// import IconEarphone from '../../assets/icon/earphone.svg';
 import IconPlay from '../../assets/icon/play.svg';
 import IconRadio from '../../assets/icon/radio.svg';
 import IconRankList from '../../assets/icon/rankList.svg';
@@ -13,16 +13,24 @@ import IconRecommend from '../../assets/icon/recommend.svg';
 import IconSongList from '../../assets/icon/songList.svg';
 import Header from '../../components/Header';
 import Slide from '../../components/Slide';
+import CommonStore from '../../store/common';
 import SlideStore from '../../store/slide';
 import { simplifyPlayCount } from '../../utils/math';
 
 const discoverAPI = new DiscoverAPI();
 const slideStore = new SlideStore();
 
+interface IProps extends RouteComponentProps {
+  commonStore: CommonStore;
+}
+
 @observer
-class Discover extends React.Component {
+@inject('commonStore')
+class Discover extends React.Component<IProps> {
   public state = { recommend: true, recSongList: [] };
   public async componentDidMount() {
+    const commonStore = this.props.commonStore!;
+    commonStore.toggleTabBar(true);
     const res = await discoverAPI.fetchRecSongList();
     this.setState({
       recSongList: res.data.result
@@ -38,13 +46,8 @@ class Discover extends React.Component {
       recommend: true
     });
   };
-  public goPlayListDetail = async (id: number) => {
-    const res = await discoverAPI.fetchPlayListDetail(id);
-    const idArr = res.data.playlist.tracks.reduce((acc: number[], v: any) => {
-      return acc.push(v.id), acc;
-    }, []);
-    const res2 = await discoverAPI.fetchSongDetail(idArr);
-    console.log(res2);
+  public goSongList = async (id: number) => {
+    this.props.history.push(`/songsheet/${id}`);
   };
   public render() {
     const recSongList = this.state.recSongList.slice(0, 6);
@@ -106,7 +109,7 @@ class Discover extends React.Component {
                 <div
                   className='songList-item'
                   key={i}
-                  onClick={() => this.goPlayListDetail(v.id)}
+                  onClick={() => this.goSongList(v.id)}
                 >
                   <div className='item-cover'>
                     <div className='item-playCount'>

@@ -1,0 +1,11 @@
+$primary-color: #d43c33;
+$white-color: #fff;
+$gray-clor: rgba(255, 255, 255, 0.7);
+$light-color: rgba(0, 0, 0, 0.5);
+$llight-color: rgba(0, 0, 0, 0.3);
+
+.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
