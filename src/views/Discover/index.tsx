@@ -3,14 +3,9 @@ import './index.scss';
 import { inject, observer } from 'mobx-react';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
+import Icon from '../../components/Icon';
 
 import DiscoverAPI from '../../api/discover';
-import IconArrow from '../../assets/icon/arrow.svg';
-import IconPlay from '../../assets/icon/play.svg';
-import IconRadio from '../../assets/icon/radio.svg';
-import IconRankList from '../../assets/icon/rankList.svg';
-import IconRecommend from '../../assets/icon/recommend.svg';
-import IconSongList from '../../assets/icon/songList.svg';
 import Header from '../../components/Header';
 import Slide from '../../components/Slide';
 import CommonStore from '../../store/common';
@@ -73,25 +68,25 @@ class Discover extends React.Component<IProps> {
           <ul>
             <li>
               <div>
-                <IconRadio width={25} height={25} fill='#FFF' />
+                <Icon iconName='#icon-diantaizhibo' fontSize={22} />
               </div>
               <span>私人FM</span>
             </li>
             <li>
               <div>
-                <IconRecommend width={25} height={25} fill='#FFF' />
+                <Icon iconName='#icon-rili' fontSize={22} />
               </div>
               <span>每日推荐</span>
             </li>
             <li>
               <div>
-                <IconSongList width={25} height={25} fill='#FFF' />
+                <Icon iconName='#icon-jiarugedan' fontSize={22} />
               </div>
               <span>歌单</span>
             </li>
             <li>
               <div>
-                <IconRankList width={25} height={25} fill='#FFF' />
+                <Icon iconName='#icon-paihangbang' fontSize={22} />
               </div>
               <span>排行榜</span>
             </li>
@@ -101,7 +96,7 @@ class Discover extends React.Component<IProps> {
           <div className='rec-songList disc-block'>
             <div className='disc-block-title'>
               <span>推荐歌单</span>
-              <IconArrow width={15} height={15} fill='#333' />
+              <Icon iconName='#icon-arrow-right-copy-copy' color='333' />
             </div>
 
             <div className='songList-container'>
@@ -113,7 +108,7 @@ class Discover extends React.Component<IProps> {
                 >
                   <div className='item-cover'>
                     <div className='item-playCount'>
-                      <IconPlay width={10} height={10} fill='#FFF' />
+                      <Icon iconName='#icon-play' fontSize={12} />
                       <span>{simplifyPlayCount(v.playCount)}</span>
                     </div>
 

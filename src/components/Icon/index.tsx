@@ -16,18 +16,23 @@ interface IProps {
   fontSize?: number;
   /** style: [选传], 图标自定义style */
   style?: object;
+  /** marginRight: [选传], 图标右边距 */
+  marginRight?: string;
+  /** onClick: [选传], 点击事件 */
+  onClick?: React.MouseEventHandler<any>;
 }
 
 class IconInfo extends React.Component<IProps> {
   public render() {
-    const { iconName, color, fontSize } = this.props;
+    const { iconName, color, fontSize, marginRight, onClick } = this.props;
     const style = {
       color: color || '#fff',
       fontSize: fontSize || 16,
+      marginRight,
       ...this.props.style
     };
     return (
-      <svg className='icon' aria-hidden='true' style={style}>
+      <svg className='icon' aria-hidden='true' style={style} onClick={onClick}>
         <use xlinkHref={iconName} />
       </svg>
     );

@@ -4,11 +4,7 @@ import { inject, observer } from 'mobx-react';
 import * as React from 'react';
 import { NavLink, RouteComponentProps } from 'react-router-dom';
 
-import IconAccount from '../../assets/icon/account.svg';
-import IconDiscover from '../../assets/icon/discover.svg';
-import IconFriend from '../../assets/icon/friend.svg';
-import IconMine from '../../assets/icon/mine.svg';
-import IconVideo from '../../assets/icon/video.svg';
+import Icon from '../../components/Icon';
 import CommonStore from '../../store/common';
 
 interface IProps extends RouteComponentProps {
@@ -18,47 +14,49 @@ interface IProps extends RouteComponentProps {
 @observer
 export default class Footer extends React.Component<IProps> {
   public render() {
+    const activeColor = '#d43c33';
+    const normalColor = 'rgba(1,1,1,.4)';
     const commonStore = this.props.commonStore!;
     const path = this.props.location.pathname;
     return commonStore.showTabBar ? (
       <div className='footer-container'>
         <NavLink to='/' exact={true}>
-          <IconDiscover
-            width={25}
-            height={25}
-            fill={path === '/' ? '#d43c33' : 'rgba(1,1,1,.4)'}
+          <Icon
+            iconName='#icon-faxian'
+            fontSize={24}
+            color={path === '/' ? activeColor : normalColor}
           />
           <span>发现</span>
         </NavLink>
         <NavLink to='/video'>
-          <IconVideo
-            width={25}
-            height={25}
-            fill={path === '/video' ? '#d43c33' : 'rgba(1,1,1,.4)'}
+          <Icon
+            iconName='#icon-shipin'
+            fontSize={24}
+            color={path === 'video' ? activeColor : normalColor}
           />
           <span>视频</span>
         </NavLink>
         <NavLink to='/mine'>
-          <IconMine
-            width={25}
-            height={25}
-            fill={path === '/mine' ? '#d43c33' : 'rgba(1,1,1,.4)'}
+          <Icon
+            iconName='#icon-yinle'
+            fontSize={24}
+            color={path === 'mine' ? activeColor : normalColor}
           />
           <span>我的</span>
         </NavLink>
         <NavLink to='/friend'>
-          <IconFriend
-            width={25}
-            height={25}
-            fill={path === '/friend' ? '#d43c33' : 'rgba(1,1,1,.4)'}
+          <Icon
+            iconName='#icon-pengyou'
+            fontSize={24}
+            color={path === 'friend' ? activeColor : normalColor}
           />
           <span>朋友</span>
         </NavLink>
         <NavLink to='/account'>
-          <IconAccount
-            width={25}
-            height={25}
-            fill={path === '/account' ? '#d43c33' : 'rgba(1,1,1,.4)'}
+          <Icon
+            iconName='#icon-zhanghao'
+            fontSize={24}
+            color={path === 'account' ? activeColor : normalColor}
           />
           <span>账号</span>
         </NavLink>

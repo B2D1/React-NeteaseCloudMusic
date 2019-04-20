@@ -1,0 +1,29 @@
+@import '../../sass/variable';
+
+.nav-container {
+    position: fixed;
+    display: flex;
+    color: #fff;
+    padding: 1rem;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 1;
+    height: 5rem;
+
+    .nav-info {
+        display: flex;
+        flex-direction: column;
+        width: 70%;
+
+        &-title {
+            font-size: 1.3rem;
+            @extend .ellipsis;
+        }
+
+        &-desc {
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+    }
+}

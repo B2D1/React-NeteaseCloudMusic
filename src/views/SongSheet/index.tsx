@@ -6,7 +6,10 @@ import { match, RouteComponentProps } from 'react-router-dom';
 
 import DiscoverAPI from '../../api/discover';
 import Icon from '../../components/Icon';
+import Nav from '../../components/Nav';
 import CommonStore from '../../store/common';
+import { simplifyPlayCount } from '../../utils/math';
+import throttle from '../../utils/throttle';
 
 const discoverAPI = new DiscoverAPI();
 
@@ -15,6 +18,8 @@ interface IProps extends RouteComponentProps {
   commonStore: CommonStore;
 }
 const initialState = {
+  showList: false,
+  blur: 0,
   showMask: false,
   songList: [],
   playlistData: {
@@ -52,10 +57,29 @@ type IState = Readonly<typeof initialState>;
 class SongSheet extends React.Component<IProps, IState> {
   public readonly state = initialState;
   public componentDidMount() {
+    const thandleBlur = throttle(this.handleBlur, this, 100);
+    window.addEventListener('scroll', thandleBlur);
     const commonStore = this.props.commonStore!;
     commonStore.toggleTabBar(false);
     this.fetchSongSheet(+this.props.match.params.id);
   }
+  public handleBlur = () => {
+    const offsetY = document.documentElement.scrollTop;
+    if (offsetY >= 0) {
+      this.setState({
+        blur: offsetY / 250
+      });
+    }
+    if (offsetY >= 240) {
+      this.setState({
+        showList: true
+      });
+    } else {
+      this.setState({
+        showList: false
+      });
+    }
+  };
   public fetchSongSheet = async (id: number) => {
     const res = await discoverAPI.fetchPlayListDetail(id);
     this.setState({ playlistData: res.data });
@@ -100,9 +124,17 @@ class SongSheet extends React.Component<IProps, IState> {
       showMask: flag
     });
   };
+  public back = () => {
+    this.props.history.goBack();
+  };
   public render() {
+    const blurStyle: React.CSSProperties = {
+      opacity: 1 - this.state.blur
+    };
+    const listStyle: React.CSSProperties = {
+      height: `calc(100vh - 5rem)`
+    };
     const { playlistData, songList } = this.state;
-    console.log(songList);
     const bgStyle: React.CSSProperties = {
       backgroundImage: 'url(' + playlistData.playlist.coverImgUrl + ')'
     };
@@ -110,8 +142,11 @@ class SongSheet extends React.Component<IProps, IState> {
       <React.Fragment>
         <div className='songsheet-bg' style={bgStyle} />
         {!this.state.showMask ? (
+          <Nav title={playlistData.playlist.name} handleBack={this.back} />
+        ) : null}
+        {!this.state.showMask ? (
           <div className='songsheet-main'>
-            <div className='songsheet-head'>
+            <div className='songsheet-head' style={blurStyle}>
               <div className='songsheet-head-cover'>
                 <img src={playlistData.playlist.coverImgUrl} />
                 {playlistData.playlist.highQuality ? (
@@ -137,7 +172,7 @@ class SongSheet extends React.Component<IProps, IState> {
                 </div>
               </div>
             </div>
-            <div className='songsheet-action'>
+            <div className='songsheet-action' style={blurStyle}>
               <ul>
                 <li>
                   <Icon iconName='#icon-pinglun' color='#fff' fontSize={25} />
@@ -157,7 +192,10 @@ class SongSheet extends React.Component<IProps, IState> {
                 </li>
               </ul>
             </div>
-            <div className='songsheet-list'>
+            <div
+              className='songsheet-list'
+              style={this.state.showList ? listStyle : {}}
+            >
               <div className='songsheet-list-head'>
                 <div className='songsheet-list-head-info'>
                   <Icon
@@ -178,7 +216,10 @@ class SongSheet extends React.Component<IProps, IState> {
                     }}
                   />
                   <span>收藏&nbsp;</span>
-                  <span>({playlistData.playlist.subscribedCount})</span>
+                  <span>
+                    ({simplifyPlayCount(+playlistData.playlist.subscribedCount)}
+                    )
+                  </span>
                 </div>
               </div>
               <div className='songsheet-list-main'>
@@ -200,10 +241,7 @@ class SongSheet extends React.Component<IProps, IState> {
                           })}
                         </div>
                       </div>
-                      <Icon
-                        iconName='#icon-dashujukeshihuaico-'
-                        fontSize={30}
-                      />
+                      <Icon iconName='#icon-gengduo1' fontSize={22} />
                     </div>
                   );
                 })}
