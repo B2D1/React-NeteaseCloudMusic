@@ -1,7 +1,7 @@
 import './index.scss';
 
 import * as React from 'react';
-import throttle from '../../utils/throttle';
+
 import Icon from '../../components/Icon';
 
 interface IProps {
@@ -11,7 +11,8 @@ interface IProps {
 
 const initialState = {
   title: '歌单',
-  scroll: false
+  scroll: false,
+  animate: false
 };
 
 type IState = Readonly<typeof initialState>;
@@ -19,22 +20,25 @@ type IState = Readonly<typeof initialState>;
 export default class Nav extends React.Component<IProps, IState> {
   public readonly state = initialState;
   public componentDidMount() {
-    const thandleScroll = throttle(this.handleScroll, this, 100);
-    window.addEventListener('scroll', thandleScroll);
+    window.addEventListener('scroll', this.handleScroll);
+  }
+  public componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
   }
   public handleScroll = () => {
     const offsetY = document.documentElement.scrollTop;
     if (offsetY === 0) {
       this.setState({
         scroll: false,
-        title: '歌单'
+        title: '歌单',
+        animate: false
       });
     }
     if (0 < offsetY && offsetY < 90) {
-      this.setState({ scroll: true, title: '歌单' });
+      this.setState({ scroll: true, title: '歌单', animate: false });
     }
     if (offsetY >= 90) {
-      this.setState({ title: this.props.title });
+      this.setState({ title: this.props.title, animate: true });
     }
   };
   public render() {
@@ -50,7 +54,19 @@ export default class Nav extends React.Component<IProps, IState> {
           onClick={this.props.handleBack}
         />
         <div className='nav-info'>
-          <span className='nav-info-title'>{this.state.title}</span>
+          {this.state.animate ? (
+            <div className='nav-info-title'>
+              <span className='animation-text'>
+                {this.state.title}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              </span>
+              <span className='animation-text'>
+                {this.state.title}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              </span>
+            </div>
+          ) : (
+            <div className='nav-info-title'>{this.state.title}</div>
+          )}
+
           <span className='nav-info-desc'>
             由B2D1倾情打造，欢迎star，提出建议
           </span>

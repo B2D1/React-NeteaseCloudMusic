@@ -9,7 +9,6 @@ import Icon from '../../components/Icon';
 import Nav from '../../components/Nav';
 import CommonStore from '../../store/common';
 import { simplifyPlayCount } from '../../utils/math';
-import throttle from '../../utils/throttle';
 
 const discoverAPI = new DiscoverAPI();
 
@@ -34,11 +33,16 @@ const initialState = {
       tracks: [
         {
           name: '',
+          alia: [],
+          al: {
+            name: ''
+          },
           ar: [
             {
               name: ''
             }
-          ]
+          ],
+          mv: 0
         }
       ],
       playCount: '',
@@ -57,11 +61,13 @@ type IState = Readonly<typeof initialState>;
 class SongSheet extends React.Component<IProps, IState> {
   public readonly state = initialState;
   public componentDidMount() {
-    const thandleBlur = throttle(this.handleBlur, this, 100);
-    window.addEventListener('scroll', thandleBlur);
+    window.addEventListener('scroll', this.handleBlur);
     const commonStore = this.props.commonStore!;
     commonStore.toggleTabBar(false);
     this.fetchSongSheet(+this.props.match.params.id);
+  }
+  public componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleBlur);
   }
   public handleBlur = () => {
     const offsetY = document.documentElement.scrollTop;
@@ -70,7 +76,7 @@ class SongSheet extends React.Component<IProps, IState> {
         blur: offsetY / 250
       });
     }
-    if (offsetY >= 240) {
+    if (offsetY >= 230) {
       this.setState({
         showList: true
       });
@@ -154,9 +160,14 @@ class SongSheet extends React.Component<IProps, IState> {
                     <Icon iconName='#icon-huangguan' color='#fff' />
                   </div>
                 ) : null}
-                <span>
-                  <Icon iconName='#icon-play' color='#fff' />
-                  {playlistData.playlist.playCount}
+                <span className='songsheet-head-playcount'>
+                  <Icon
+                    iconName='#icon-play'
+                    color='#fff'
+                    fontSize={12}
+                    marginRight='3px'
+                  />
+                  {simplifyPlayCount(+playlistData.playlist.playCount)}
                 </span>
               </div>
               <div className='songsheet-head-info'>
@@ -187,7 +198,7 @@ class SongSheet extends React.Component<IProps, IState> {
                   <span>下载</span>
                 </li>
                 <li>
-                  <Icon iconName='#icon-xiazai' color='#fff' fontSize={25} />
+                  <Icon iconName='#icon-checkbox' color='#fff' fontSize={25} />
                   <span>多选</span>
                 </li>
               </ul>
@@ -215,10 +226,11 @@ class SongSheet extends React.Component<IProps, IState> {
                       marginRight: '5'
                     }}
                   />
-                  <span>收藏&nbsp;</span>
+                  <span>收藏</span>
                   <span>
-                    ({simplifyPlayCount(+playlistData.playlist.subscribedCount)}
-                    )
+                    （
+                    {simplifyPlayCount(+playlistData.playlist.subscribedCount)}
+                    ）
                   </span>
                 </div>
               </div>
@@ -229,17 +241,35 @@ class SongSheet extends React.Component<IProps, IState> {
                       <span className='item-order'>{i + 1}</span>
                       <div>
                         <div className='item-songname'>
-                          <span>{song.name}</span>
+                          <div>
+                            <span>
+                              {song.name}
+                              {song.alia.length ? '（' : null}
+                              {song.alia.length >= 1 &&
+                                song.alia.map((name, i3) => {
+                                  return <span key={i3}>{name}</span>;
+                                })}
+                              {song.alia.length ? '）' : null}
+                            </span>
+                          </div>
                         </div>
+
                         <div className='item-authorname'>
                           {song.ar.map((author, i2) => {
                             return (
                               <span key={i2}>
-                                {author.name + (i2 > 1 ? '/ ' : '')}
+                                {author.name +
+                                  (i2 === song.ar.length - 1 ? '' : '/')}
                               </span>
                             );
                           })}
+                          {song.al.name ? <span> - {song.al.name}</span> : null}
                         </div>
+                      </div>
+                      <div className='item-mv'>
+                        {song.mv ? (
+                          <Icon iconName='#icon-zhongxinshipin' fontSize={24} />
+                        ) : null}
                       </div>
                       <Icon iconName='#icon-gengduo1' fontSize={22} />
                     </div>
