@@ -28,7 +28,7 @@
     "file-loader": "1.1.5",
     "fork-ts-checker-webpack-plugin": "^0.2.8",
     "fs-extra": "3.0.1",
-    "html-webpack-plugin": "2.29.0",
+    "html-webpack-plugin": "5.5.0",
     "jest": "20.0.4",
     "mobx": "^5.9.0",
     "mobx-react": "^5.4.3",
